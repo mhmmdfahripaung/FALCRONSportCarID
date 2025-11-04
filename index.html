@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FALCRON HyperTech Car</title>
+  <style>
+    /* ==== STYLE DASAR ==== */
+    :root{
+      --accent1: #7d2eff;
+      --accent2: #00e7ff;
+      --bg-1: #0a0f25;
+      --bg-2: #020512;
+      --card-gradient: linear-gradient(180deg, #121733, #191f45);
+      --glass: rgba(15,20,45,0.75);
+      --muted: #a0b3d1;
+      --max-width: 1200px;
+      --radius: 16px;
+      --ease: cubic-bezier(.2,.9,.2,1);
+      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    *{box-sizing: border-box;}
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, var(--bg-1), var(--bg-2));
+      color: #fff;
+      overflow-x: hidden;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height: 1.45;
+    }
+
+    .container{
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    header {
+      background: rgba(10, 20, 40, 0.92);
+      padding: 12px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid rgba(125,46,255,0.18);
+      box-shadow: 0 6px 30px rgba(13,8,33,0.55);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(6px);
+    }
+
+    header .brand { display:flex; gap:12px; align-items:center; }
+    header img.logo { height:52px; width:52px; object-fit:cover; border-radius:50%; }
+
+    nav { display:flex; gap:14px; align-items:center; }
+    nav a {
+      color:#9effff; text-decoration:none; font-weight:600; padding:8px 10px; border-radius:8px;
+      transition: all .18s var(--ease);
+    }
+    nav a:hover { color:#fff; transform:translateY(-2px); background:rgba(255,255,255,0.02); }
+
+    /* ==== HERO ==== */
+    .hero {
+      background: url('falcron_logo.png') center/cover no-repeat;
+      text-align: center;
+      padding: 110px 20px;
+      background-blend-mode: overlay;
+      background-color: rgba(0,0,0,0.56);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::after{
+      content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.4)); pointer-events:none;
+    }
+    .hero .container { position:relative; z-index:2; }
+    .hero h1 { margin:0; font-size:56px; color:var(--accent2); text-shadow:0 0 30px var(--accent2); animation:glowText 3s infinite alternate; }
+    .hero p { font-size:18px; max-width:760px; margin:18px auto 0; color:#cfe7ff; }
+
+    @keyframes glowText { from { text-shadow:0 0 20px var(--accent2);} to { text-shadow:0 0 40px #a86dff;} }
+
+    /* ==== SECTION DIVIDER (SVG) ==== */
+    .divider { display:block; width:100%; line-height:0; margin:0; }
+    .divider svg { display:block; width:100%; height:36px; }
+
+    /* ==== PRODUK ==== */
+    .produk { padding:64px 20px; background: linear-gradient(180deg, #0d0f25, #0f1330); color:#e8eefc; }
+    .produk .container { text-align:center; }
+    .produk h2 { color:var(--accent1); margin-bottom:28px; font-size:32px; text-transform:uppercase; text-shadow:0 0 16px var(--accent1); }
+    .produk-item { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:22px; align-items:start; }
+
+    .card {
+      background:var(--card-gradient); border:1px solid rgba(125,46,255,0.12); border-radius:14px; overflow:hidden;
+      transition:transform .35s var(--ease), box-shadow .35s var(--ease); box-shadow:0 6px 24px rgba(9,8,30,0.6);
+      display:flex; flex-direction:column;
+      opacity:0; transform:translateY(12px); animation:fadeUp .6s var(--ease) forwards;
+    }
+    .card:nth-child(1){ animation-delay: .08s; }
+    .card:nth-child(2){ animation-delay: .14s; }
+    .card:nth-child(3){ animation-delay: .20s; }
+
+    .card:hover { transform:translateY(-8px); box-shadow:0 18px 45px rgba(168,109,255,0.16); }
+    .card img { width:100%; height:200px; object-fit:cover; display:block; }
+    .card-body{ padding:14px 16px; display:flex; flex-direction:column; gap:8px; }
+    .card h3 { margin:0; color:var(--accent2); font-size:18px; }
+    .card p { margin:0; color:#d6dff8; font-size:14px; line-height:1.5; }
+
+    @keyframes fadeUp { to { opacity:1; transform:translateY(0);} }
+
+    /* ==== PRE-ORDER ==== */
+    .preorder-section { display:flex; justify-content:center; align-items:center; padding:56px 20px; background:linear-gradient(180deg,#0c0f22,#0f1635); }
+    .preorder-card { position:relative; background:var(--glass); border-radius:12px; padding:22px; width:100%; max-width:520px; border:1px solid rgba(125,46,255,0.12); box-shadow:0 10px 40px rgba(125,46,255,0.08); }
+
+    /* ribbon */
+    .ribbon {
+      position:absolute; right:14px; top:14px; background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:#000;
+      padding:6px 10px; font-weight:800; border-radius:8px; box-shadow:0 6px 18px rgba(125,46,255,0.12);
+      transform:rotate(0deg);
+    }
+
+    .preorder-price { font-size:28px; font-weight:800; color:#fff; margin:6px 0 10px; }
+    .preorder-info div{ font-size:14px; color:#d7e2ff; margin:6px 0; }
+    .preorder-status { color:#00ffbf; font-weight:700; }
+
+    .preorder-buttons { display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+    .btn { border:none; padding:10px 14px; border-radius:10px; font-weight:700; cursor:pointer; transition:transform .16s var(--ease); box-shadow:0 8px 22px rgba(125,46,255,0.08); }
+    .btn-primary { background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:#000; }
+    .btn-outline { background:transparent; border:1px solid var(--accent2); color:var(--accent2); }
+
+    .sales-list { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; align-items:center; justify-content:center; }
+
+    .sales-item { font-size:13px; color:#d7e2ff; display:flex; gap:8px; align-items:center; }
+    .sales-phone { background:rgba(255,255,255,0.02); padding:6px 8px; border-radius:8px; font-weight:700; color:var(--accent2); cursor:pointer; border:1px solid rgba(125,46,255,0.06); }
+
+    /* ==== FILOSOFI (DI AKHIR) ==== */
+    .filosofi { padding:56px 20px; background: radial-gradient(circle at center,#120d2a,#050714); text-align:center; color:#dbe8ff; position:relative; }
+    .filosofi::before { content:""; position:absolute; inset:0; background:url('https://www.transparenttextures.com/patterns/stardust.png'); opacity:0.06; pointer-events:none; }
+    .filosofi h2 { font-size:28px; color:var(--accent2); text-shadow:0 0 12px var(--accent1); margin-bottom:10px; }
+    .filosofi p { max-width:900px; margin:0 auto; line-height:1.8; color:#cfd7ff; font-size:16px; }
+
+    /* ==== FOOTER ==== */
+    footer { text-align:center; padding:26px 20px; border-top:1px solid rgba(125,46,255,0.06); color:var(--muted); font-size:14px; background-color:#060713; }
+
+    /* ==== POPUP TEST DRIVE ==== */
+    .popup { display:none; position:fixed; z-index:999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; backdrop-filter:blur(6px); padding:20px; }
+    .popup-content { background:linear-gradient(180deg,#0e1030,#1a1e4f); padding:20px; border-radius:12px; width:100%; max-width:420px; color:#fff; border:1px solid rgba(125,46,255,0.08); }
+
+    label{ display:block; font-size:13px; margin:8px 0 6px; color:#cfe6ff; }
+    input[type="text"], input[type="date"], input[type="time"], select {
+      width:100%; margin-bottom:8px; padding:10px; border-radius:8px; border:1px solid rgba(0,224,255,0.12); background:#0b0f19; color:#fff; font-size:14px;
+    }
+
+    .popup-footer { display:flex; gap:8px; margin-top:12px; justify-content:flex-end; }
+
+    /* ==== RESPONSIVE ==== */
+    @media (max-width:720px){
+      .hero h1{ font-size:36px; } .hero{ padding:64px 12px; }
+      header img.logo{ height:44px; width:44px; } nav{ gap:8px; font-size:14px; }
+      .produk h2{ font-size:26px; } .preorder-card{ padding:16px; }
+      .ribbon{ right:10px; top:10px; padding:6px 8px; font-size:12px; }
+      .sales-list{ flex-direction:column; align-items:stretch; }
+      .sales-item button { width:100%; text-align:center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container" style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="brand">
+        <img src="logo.jpg" alt="Logo FALCRON" class="logo" />
+        <div>
+          <div style="font-weight:800;color:var(--accent2);font-size:16px;">FALCRON HyperTech</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">Fusion of Power and Intelligence</div>
+        </div>
+      </div>
+
+      <nav aria-label="Main Navigation">
+        <a href="#home">Beranda</a>
+        <a href="#produk">Produk</a>
+        <a href="#preorder">Pre-Order</a>
+        <a href="#filosofi">Filosofi</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" id="home" role="banner" aria-label="Hero">
+    <div class="container">
+      <h1>FALCRON HyperTech</h1>
+      <p>Gabungan kekuatan <b>Falcon</b> dan <b>teknologi futuristik</b> — melampaui batas inovasi otomotif.</p>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,30 C300,10 900,10 1200,30 L1200,36 L0,36 Z" fill="#060717" opacity="0.6"></path>
+    </svg>
+  </div>
+
+  <section class="produk" id="produk">
+    <div class="container">
+      <h2>Produk Unggulan</h2>
+      <div class="produk-item" role="list">
+        <article class="card" role="listitem" aria-labelledby="prod1-title">
+          <img src="falcron1.jpg" alt="Falcron HyperX">
+          <div class="card-body">
+            <h3 id="prod1-title">FALCRON HyperX</h3>
+            <p>Mobil listrik berperforma tinggi dengan sistem AI adaptif dan kecepatan hingga 400 km/jam.</p>
+          </div>
+        </article>
+
+        <article class="card" role="listitem" aria-labelledby="prod2-title">
+          <img src="falcron2.jpg" alt="Falcron AeroOne">
+          <div class="card-body">
+            <h3 id="prod2-title">FALCRON AeroOne</h3>
+            <p>Desain aerodinamis ultra ringan dengan teknologi otonom generasi ke-3.</p>
+          </div>
+        </article>
+
+        <article class="card" role="listitem" aria-labelledby="prod3-title">
+          <img src="falcron3.jpg" alt="Falcron VoltX">
+          <div class="card-body">
+            <h3 id="prod3-title">FALCRON VoltX</h3>
+            <p>Ditenagai baterai pintar yang mampu mengisi 90% hanya dalam 8 menit.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,6 C300,26 900,26 1200,6 L1200,0 L0,0 Z" fill="#071022" opacity="0.6"></path>
+    </svg>
+  </div>
+
+  <!-- ==== PRE-ORDER ==== -->
+  <section class="preorder-section" id="preorder">
+    <div class="container" style="display:flex;justify-content:center;">
+      <div class="preorder-card" role="region" aria-label="Preorder">
+        <div class="ribbon">PRE-ORDER</div>
+        <h3 style="margin-top:6px;color:#cfd9ff;">Mulai dari</h3>
+        <div class="preorder-price">Rp 6.750.000.000</div>
+
+        <div class="preorder-info">
+          <div>OTR <strong>Indonesia</strong> | Status <span class="preorder-status">Pre-Order</span></div>
+          <div>Motor: <strong>Dual Electric 1,200 kW</strong></div>
+          <div>Baterai: <strong>120 kWh — Fast Charge</strong></div>
+          <div>Sistem: <strong>Neural Drive v3.1</strong></div>
+        </div>
+
+        <div class="preorder-buttons" style="margin-top:12px;">
+          <button class="btn btn-primary" onclick="goPreorder()">✨ Pre-Order Sekarang</button>
+          <button class="btn btn-primary" onclick="openWhatsAppSales(primarySales[0])">📲 Hubungi Sales F</button>
+          <button class="btn btn-outline" onclick="openWhatsAppSales(primarySales[1])">📲 Hubungi Sales R</button>
+          <button class="btn btn-outline" id="btnTestDrive">🚀 Jadwalkan Test Drive</button>
+        </div>
+
+        <div class="sales-list" aria-hidden="false">
+          <!-- tombol sales yang langsung membuka WhatsApp -->
+          <div class="sales-item">
+            <button class="sales-phone btn-outline" onclick="openWhatsAppSales('6283879414716')" aria-label="Hubungi Sales F via WhatsApp">
+              Sales F — 0838-7941-4716
+            </button>
+          </div>
+          <div class="sales-item">
+            <button class="sales-phone btn-outline" onclick="openWhatsAppSales('6288220423371')" aria-label="Hubungi Sales R via WhatsApp">
+              Sales R — 0882-2042-3371
+            </button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;color:#cfd9ff;font-size:13px;">
+          Pembiayaan & customisasi tersedia. Hubungi kami untuk paket eksklusif.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider" aria-hidden="true">
+    <svg viewBox="0 0 1200 36" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,30 C300,10 900,10 1200,30 L1200,36 L0,36 Z" fill="#050617" opacity="0.5"></path>
+    </svg>
+  </div>
+
+  <!-- ==== FILOSOFI (DI AKHIR) ==== -->
+  <section class="filosofi" id="filosofi">
+    <div class="container">
+      <h2>🌀 Filosofi FALCRON</h2>
+      <p>
+        FALCRON berasal dari dua kata: <b>FALCON</b> → melambangkan elang, simbol kecepatan, ketajaman visi, dan kekuatan yang bebas di langit.
+        <br><br>
+        <b>CRON</b> → diambil dari kata <i>chronos</i> (waktu) dan <i>techno</i> (teknologi), yang menggambarkan ketepatan, inovasi, dan kemajuan sistem modern.
+        <br><br>
+        Maka, <b>FALCRON</b> berarti:
+        <br><i>"Perpaduan antara kekuatan alami dan kecerdasan teknologi."</i>
+        <br><br>
+        Elang terbang tinggi dengan insting tajam, sementara teknologi memastikan arah dan kecepatan yang presisi. FALCRON adalah simbol harmoni antara jiwa bebas manusia dan kecanggihan mesin.
+      </p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2025 FALCRON Technologies. All rights reserved.<br>“Fusion of Power and Intelligence”</p>
+      <p style="margin-top:6px;color:var(--muted);font-weight:600;">KARYA MUHAMAD RAFFI AND FAHRI</p>
+    </div>
+  </footer>
+
+  <!-- Popup Test Drive -->
+  <div id="popupForm" class="popup" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="popup-content" role="document" aria-labelledby="tdTitle">
+      <h3 id="tdTitle" style="margin-top:0;color:#dbe8ff;">Formulir Test Drive</h3>
+
+      <label for="nama">Nama:</label>
+      <input type="text" id="nama" placeholder="Nama lengkap" required>
+
+      <label for="kendaraan">Pilih Kendaraan:</label>
+      <select id="kendaraan" required>
+        <option value="" disabled selected>— Pilih kendaraan —</option>
+        <option value="FALCRON HyperX">FALCRON HyperX</option>
+        <option value="FALCRON AeroOne">FALCRON AeroOne</option>
+        <option value="FALCRON VoltX">FALCRON VoltX</option>
+      </select>
+
+      <label for="tanggal">Tanggal:</label>
+      <input type="date" id="tanggal" required>
+
+      <label for="waktu">Waktu:</label>
+      <input type="time" id="waktu" required>
+
+      <div class="popup-footer">
+        <button class="btn btn-primary" onclick="kirimForm()">Kirim</button>
+        <button class="btn btn-outline" onclick="tutupPopup()">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sales numbers (international format tanpa +)
+    // Diisi berdasarkan nomor yang kamu minta:
+    // Sales F (lokal): 083879414716 -> international: 6283879414716
+    // Sales R (lokal): 088220423371 -> international: 6288220423371
+    const primarySales = ["6283879414716", "6288220423371"];
+
+    // Fungsi goPreorder sekarang mengirim pesan WhatsApp ke sales pertama (primarySales[0])
+    function goPreorder() {
+      const number = primarySales[0];
+      const message = encodeURIComponent("Halo, saya tertarik untuk melakukan PRE-ORDER FALCRON HyperTech. Mohon info ketersediaan, harga final, dan langkah selanjutnya. Terima kasih.");
+      window.open(`https://wa.me/${number}?text=${message}`, "_blank");
+    }
+
+    function openWhatsAppSales(number) {
+      // number diharapkan sudah dalam format internasional tanpa +
+      const message = encodeURIComponent("Halo, saya tertarik dengan mobil FALCRON. Bisa bantu untuk info lebih lanjut?");
+      // gunakan wa.me agar langsung membuka chat (web & mobile)
+      window.open(`https://wa.me/${number}?text=${message}`, "_blank");
+    }
+
+    document.getElementById("btnTestDrive").addEventListener("click", function(){
+      const popup = document.getElementById("popupForm");
+      popup.style.display = "flex";
+      popup.setAttribute("aria-hidden", "false");
+      document.getElementById("nama").focus();
+    });
+
+    function tutupPopup() {
+      const popup = document.getElementById("popupForm");
+      popup.style.display = "none";
+      popup.setAttribute("aria-hidden", "true");
+    }
+
+    function kirimForm() {
+      const nama = document.getElementById("nama").value.trim();
+      const kendaraan = document.getElementById("kendaraan").value;
+      const tanggal = document.getElementById("tanggal").value;
+      const waktu = document.getElementById("waktu").value;
+
+      if (!nama || !kendaraan || !tanggal || !waktu) {
+        alert("Lengkapi semua data terlebih dahulu dan pilih kendaraan!");
+        return;
+      }
+
+      // Kirim ke Sales F by default — kamu bisa ubah logika ini jika mau pilih sales berbeda.
+      const nomor = primarySales[0];
+      const pesan = encodeURIComponent(`Halo, saya ${nama} ingin menjadwalkan test drive ${kendaraan} pada ${tanggal} pukul ${waktu}. Mohon konfirmasi ketersediaan.`);
+      window.open(`https://wa.me/${nomor}?text=${pesan}`, "_blank");
+      tutupPopup();
+    }
+
+    // close popup when clicking outside content
+    document.getElementById("popupForm").addEventListener("click", function(e){
+      if (e.target === this) tutupPopup();
+    });
+
+    // keyboard accessibility: close on ESC
+    document.addEventListener('keydown', function(e){
+      if (e.key === "Escape") {
+        const popup = document.getElementById("popupForm");
+        if (popup.style.display === "flex") tutupPopup();
+      }
+    });
+  </script>
+</body>
+</html>
